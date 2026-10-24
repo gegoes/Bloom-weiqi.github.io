@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soft Weiqi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <header class="header">
+            <h1>Soft Weiqi</h1>
+            <div class="status">
+                <div class="turn-indicator">
+                    <span class="stone-indicator black"></span>
+                    <span id="turnText">Black's turn</span>
+                </div>
+                <div class="move-count">Move: <span id="moveCount">0</span></div>
+            </div>
+        </header>
+
+        <main class="main">
+            <div class="board-container">
+                <svg id="board" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid meet"></svg>
+            </div>
+        </main>
+
+        <footer class="controls">
+            <button id="passBtn" class="btn">Pass</button>
+            <button id="undoBtn" class="btn">Undo</button>
+            <button id="resetBtn" class="btn btn-primary">New Game</button>
+        </footer>
+
+        <div class="info">
+            <p>Click intersections to place stones • Pass to end your turn</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

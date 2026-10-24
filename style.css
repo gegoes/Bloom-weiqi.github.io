@@ -10,19 +10,17 @@
     --grid: #6b5d4f;
     --black: #1a1a1a;
     --white: #f5f5f5;
-    --text: #3d3d3d;
+    --text: #2d2d2d;
     --text-light: #6b6b6b;
     --border: #d4c4a9;
     --accent: #8b7355;
+    --accent-hover: #7a6347;
 }
 
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     background: linear-gradient(135deg, var(--bg) 0%, #ebe7e0 100%);
     min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     padding: 20px;
     color: var(--text);
     -webkit-font-smoothing: antialiased;
@@ -30,8 +28,8 @@ body {
 }
 
 .app {
-    width: 100%;
-    max-width: 650px;
+    max-width: 1100px;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
     gap: 24px;
@@ -53,36 +51,72 @@ body {
     text-align: center;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
 }
 
 .header h1 {
-    font-size: 28px;
+    font-size: 32px;
     font-weight: 600;
     letter-spacing: -0.02em;
     color: var(--text);
 }
 
-.status {
+.game-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+}
+
+.info-row {
     display: flex;
     align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
     justify-content: center;
-    gap: 32px;
+}
+
+.score-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     font-size: 14px;
-    color: var(--text-light);
+    color: var(--text);
+}
+
+.stone-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.stone-dot.black {
+    background: radial-gradient(circle at 30% 30%, #4a4a4a, var(--black));
+}
+
+.stone-dot.white {
+    background: radial-gradient(circle at 30% 30%, #ffffff, var(--white));
+    border: 1px solid #ccc;
 }
 
 .turn-indicator {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    padding: 8px 20px;
+    background: white;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    font-weight: 500;
 }
 
 .stone-indicator {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .stone-indicator.black {
@@ -91,17 +125,24 @@ body {
 
 .stone-indicator.white {
     background: radial-gradient(circle at 30% 30%, #ffffff, var(--white));
-    border: 1px solid #ccc;
+    border: 1px solid #bbb;
 }
 
-.move-count {
+.move-info {
+    font-size: 13px;
     color: var(--text-light);
 }
 
 .main {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 24px;
+    align-items: start;
+}
+
+.board-wrapper {
     display: flex;
     justify-content: center;
-    align-items: center;
 }
 
 .board-container {
@@ -112,6 +153,8 @@ body {
         0 20px 60px rgba(107, 93, 79, 0.2),
         0 0 0 1px var(--border) inset;
     transition: box-shadow 0.3s ease;
+    width: 100%;
+    max-width: 600px;
 }
 
 .board-container:hover {
@@ -122,7 +165,6 @@ body {
 
 #board {
     width: 100%;
-    max-width: 536px;
     height: auto;
     display: block;
     cursor: pointer;
@@ -131,24 +173,24 @@ body {
 .grid-line {
     stroke: var(--grid);
     stroke-width: 1;
-    opacity: 0.6;
+    opacity: 0.7;
 }
 
 .star-point {
     fill: var(--grid);
-    opacity: 0.7;
+    opacity: 0.8;
 }
 
 .stone {
     cursor: pointer;
-    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25));
-    animation: placeStone 0.25s ease-out;
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3));
+    animation: placeStone 0.2s ease-out;
 }
 
 @keyframes placeStone {
     from {
         opacity: 0;
-        transform: scale(0.7);
+        transform: scale(0.6);
     }
     to {
         opacity: 1;
@@ -162,40 +204,75 @@ body {
 
 .stone.white {
     fill: url(#whiteGradient);
-    stroke: #bbb;
-    stroke-width: 0.5;
+    stroke: #999;
+    stroke-width: 0.3;
 }
 
-.controls {
+.ko-marker {
+    fill: none;
+    stroke: #d32f2f;
+    stroke-width: 2;
+    opacity: 0.8;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
+
+.sidebar {
     display: flex;
-    gap: 12px;
-    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.panel {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.panel h2 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--text);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 11px;
+}
+
+.controls-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
 }
 
 .btn {
     font-family: 'Inter', sans-serif;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
-    padding: 10px 24px;
+    padding: 8px 16px;
     background: white;
     color: var(--text);
     border: 1px solid var(--border);
     border-radius: 8px;
     cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    transition: all 0.15s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
 .btn:hover {
     background: #fafafa;
     border-color: var(--accent);
-    box-shadow: 0 2px 8px rgba(139, 115, 85, 0.15);
-    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(139, 115, 85, 0.12);
 }
 
 .btn:active {
     transform: translateY(0);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .btn-primary {
@@ -205,16 +282,130 @@ body {
 }
 
 .btn-primary:hover {
-    background: #7a6347;
-    border-color: #7a6347;
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
     color: white;
+}
+
+.btn-block {
+    width: 100%;
+    margin-top: 8px;
+}
+
+.setting {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.setting label {
+    font-size: 12px;
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+.select, .input {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    padding: 7px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: white;
+    color: var(--text);
+    cursor: pointer;
+}
+
+.input {
+    cursor: text;
+}
+
+.select:hover, .input:hover {
+    border-color: var(--accent);
+}
+
+.scoring-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.score-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--text);
+}
+
+.score-result {
+    margin-top: 10px;
+    padding: 10px;
+    background: #f9f8f6;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--text);
+}
+
+.sgf-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
 .info {
     text-align: center;
-    font-size: 13px;
+    font-size: 12px;
     color: var(--text-light);
     opacity: 0.8;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease-in;
+}
+
+.modal-content {
+    background: white;
+    padding: 32px;
+    border-radius: 12px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.modal-content h2 {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.modal-content p {
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+@media (max-width: 968px) {
+    .main {
+        grid-template-columns: 1fr;
+    }
+    
+    .sidebar {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
 }
 
 @media (max-width: 640px) {
@@ -222,20 +413,11 @@ body {
         padding: 12px;
     }
     
-    .app {
-        gap: 16px;
-    }
-    
     .board-container {
         padding: 16px;
     }
     
-    .status {
-        flex-direction: column;
-        gap: 8px;
-    }
-    
-    .controls {
-        flex-wrap: wrap;
+    .info-row {
+        gap: 16px;
     }
 }

@@ -13,29 +13,116 @@
     <div class="app">
         <header class="header">
             <h1>Soft Weiqi</h1>
-            <div class="status">
-                <div class="turn-indicator">
-                    <span class="stone-indicator black"></span>
-                    <span id="turnText">Black's turn</span>
+            <div class="game-info">
+                <div class="info-row">
+                    <div class="score-box">
+                        <span class="stone-dot black"></span>
+                        <span>Black: <strong id="blackCaptures">0</strong></span>
+                    </div>
+                    <div class="turn-indicator">
+                        <span class="stone-indicator" id="turnIndicator"></span>
+                        <span id="turnText">Black's turn</span>
+                    </div>
+                    <div class="score-box">
+                        <span class="stone-dot white"></span>
+                        <span>White: <strong id="whiteCaptures">0</strong></span>
+                    </div>
                 </div>
-                <div class="move-count">Move: <span id="moveCount">0</span></div>
+                <div class="move-info">
+                    Move: <span id="moveCount">0</span> • Passes: <span id="passCount">0</span>
+                </div>
             </div>
         </header>
 
         <main class="main">
-            <div class="board-container">
-                <svg id="board" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid meet"></svg>
+            <div class="board-wrapper">
+                <div class="board-container">
+                    <svg id="board" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid meet"></svg>
+                </div>
             </div>
+            
+            <aside class="sidebar">
+                <section class="panel">
+                    <h2>Game</h2>
+                    <div class="controls-grid">
+                        <button id="passBtn" class="btn">Pass</button>
+                        <button id="resignBtn" class="btn">Resign</button>
+                        <button id="undoBtn" class="btn">Undo</button>
+                        <button id="newGameBtn" class="btn btn-primary">New Game</button>
+                    </div>
+                </section>
+
+                <section class="panel">
+                    <h2>Settings</h2>
+                    <div class="setting">
+                        <label for="boardSize">Board Size</label>
+                        <select id="boardSize" class="select">
+                            <option value="9">9x9</option>
+                            <option value="13">13x13</option>
+                            <option value="19" selected>19x19</option>
+                        </select>
+                    </div>
+                    <div class="setting">
+                        <label for="komi">Komi (White)</label>
+                        <input type="number" id="komi" class="input" value="6.5" step="0.5" min="0">
+                    </div>
+                    <div class="setting">
+                        <label for="handicap">Handicap</label>
+                        <select id="handicap" class="select">
+                            <option value="0" selected>0</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                        </select>
+                    </div>
+                </section>
+
+                <section class="panel">
+                    <h2>Scoring</h2>
+                    <div class="scoring-info">
+                        <div class="score-row">
+                            <span>Black Captures</span>
+                            <span id="blackCapturesSidebar">0</span>
+                        </div>
+                        <div class="score-row">
+                            <span>White Captures</span>
+                            <span id="whiteCapturesSidebar">0</span>
+                        </div>
+                        <div class="score-row">
+                            <span>Komi</span>
+                            <span id="komiDisplay">6.5</span>
+                        </div>
+                        <button id="scoreBtn" class="btn btn-block">Count Territory</button>
+                        <div id="scoreResult" class="score-result" style="display:none;"></div>
+                    </div>
+                </section>
+
+                <section class="panel">
+                    <h2>SGF</h2>
+                    <div class="sgf-controls">
+                        <button id="saveSgfBtn" class="btn btn-block">Save SGF</button>
+                        <input type="file" id="loadSgfInput" accept=".sgf" style="display:none;">
+                        <button id="loadSgfBtn" class="btn btn-block">Load SGF</button>
+                    </div>
+                </section>
+            </aside>
         </main>
 
-        <footer class="controls">
-            <button id="passBtn" class="btn">Pass</button>
-            <button id="undoBtn" class="btn">Undo</button>
-            <button id="resetBtn" class="btn btn-primary">New Game</button>
-        </footer>
-
         <div class="info">
-            <p>Click intersections to place stones • Pass to end your turn</p>
+            <p>Click intersections • Ko rule enforced • Proper capture & liberties</p>
+        </div>
+    </div>
+
+    <div id="gameOverModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <h2>Game Over</h2>
+            <p id="gameOverText"></p>
+            <button id="closeModal" class="btn btn-primary">Close</button>
         </div>
     </div>
 

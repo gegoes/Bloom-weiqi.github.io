@@ -111,7 +111,8 @@ class GoGame {
             this.komi = parseFloat(e.target.value);
             document.getElementById('komiDisplay').textContent = this.komi;
         });
-        document.getElementById('handicap').addEventListener('change', (e) => {
+        const handicap = document.getElementById('handicap');
+        if (handicap) handicap.addEventListener('change', (e) => {
             this.handicap = parseInt(e.target.value);
         });
         document.getElementById('scoreBtn').addEventListener('click', () => this.countScore());
@@ -468,4 +469,11 @@ class GoGame {
 
 document.addEventListener('DOMContentLoaded', () => {
     new GoGame();
+    document.querySelectorAll('[data-scroll]').forEach((button) => button.addEventListener('click', () => document.querySelector(button.dataset.scroll)?.scrollIntoView({ behavior: 'smooth' })));
+    const subscribeModal = document.getElementById('subscribeModal');
+    document.querySelectorAll('[data-plan]').forEach((button) => button.addEventListener('click', () => {
+        if (button.dataset.plan !== 'free') subscribeModal.style.display = 'flex';
+        else document.getElementById('play').scrollIntoView({ behavior: 'smooth' });
+    }));
+    document.querySelectorAll('[data-close]').forEach((button) => button.addEventListener('click', () => subscribeModal.style.display = 'none'));
 });
